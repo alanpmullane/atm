@@ -15,10 +15,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig extends WebMvcConfigurationSupport {
 	@Bean
-	public Docket productApi() {
+	public Docket apiDocket() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("com.alanpmullane.atm.controllers"))
-				.paths(PathSelectors.ant("/accounts/**"))
+				.apis(RequestHandlerSelectors.any())
+				.paths(PathSelectors.any())
 				.build();
 	}
 
