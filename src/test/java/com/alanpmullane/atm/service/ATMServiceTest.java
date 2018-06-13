@@ -47,10 +47,15 @@ public class ATMServiceTest {
 	}
 
 	@Test
-	public void withdrawalValidAmount() throws Exception {
+	public void withdrawalMultipleAmounts() throws Exception {
+		// { "accountNumber": 123456789, "pin": 1234, "amount": 800, "overdraft": 200}
 		Withdrawal withdrawal = atmService.makeWithdrawal(123456789l, 1234, 10);
-		assertTrue(withdrawal.getAmount().equals(10)); // €10 withdrawal
-		assertTrue(withdrawal.calculateAmount().equals(1)); // 1 denomination of €10s
+		assertTrue(withdrawal.getAmount().equals(10)); 
+		assertTrue(withdrawal.getBalance().equals(790)); 
+
+		withdrawal = atmService.makeWithdrawal(123456789l, 1234, 215);
+		assertTrue(withdrawal.getAmount().equals(215));
+		assertTrue(withdrawal.getBalance().equals(575)); 		
 	}
 	
 	@Test

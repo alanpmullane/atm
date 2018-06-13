@@ -4,6 +4,8 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import com.alanpmullane.atm.validator.AccountValidator;
 
 @Service
 public class ATMService {
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private ATMValidator atmValidator;
@@ -37,6 +41,8 @@ public class ATMService {
 		BankNotes bankNotes = new BankNotes(ATMUtil.buildDenominationMap(
 				new Integer[] {100, 300, 600, 1000})); // 20x€5, 30x€10, 30x€20, 20x€50
 		atmStore.setBankNotes(bankNotes);
+		
+		logger.debug("initialiseATM: \n atmStore: " + atmStore.toString());
 		
 		// setup accounts
 		accountService.initialiseAccounts();

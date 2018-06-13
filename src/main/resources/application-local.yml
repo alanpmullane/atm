@@ -1,0 +1,7 @@
+
+logging:
+  level:
+    ROOT: ERROR
+    org.springframework: ERROR
+    com.alanpmullane: DEBUG
+  file: application.log

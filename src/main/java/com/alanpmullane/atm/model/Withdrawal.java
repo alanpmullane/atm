@@ -14,12 +14,4 @@ public class Withdrawal {
 	private Integer amount;
 	private LinkedHashMap<Denomination, Integer> denominations;
 	private Integer balance;
-	
-	public Integer calculateAmount() {
-		Integer amount = 0;
-		for (Denomination denomination : Denomination.values()) {
-			amount += denominations.get(denomination);
-		}
-		return amount;
-	}
 }
