@@ -44,11 +44,8 @@ JSON Response:
   "accountNumber": 123456789,
   "amount": 50,
   "denominations": {"Five":1,"Ten":0,"Twenty":0,"Fifty":1},
-  "balance": 750}
-```
-
-```
-{"accountNumber":123456789,"amount":5,"denominations":{"Five":1,"Ten":0,"Twenty":0,"Fifty":0},"balance":795}
+  "balance": 750
+}
 ```
 
 

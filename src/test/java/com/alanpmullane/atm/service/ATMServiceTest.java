@@ -49,8 +49,8 @@ public class ATMServiceTest {
 	@Test
 	public void withdrawalValidAmount() throws Exception {
 		Withdrawal withdrawal = atmService.makeWithdrawal(123456789l, 1234, 10);
-		assertTrue(withdrawal.getAmount().equals(10));
-		assertTrue(withdrawal.calculateAmount().equals(10));
+		assertTrue(withdrawal.getAmount().equals(10)); // €10 withdrawal
+		assertTrue(withdrawal.calculateAmount().equals(1)); // 1 denomination of €10s
 	}
 	
 	@Test
