@@ -1,35 +1,43 @@
 package com.alanpmullane.atm.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alanpmullane.atm.exception.InvalidAccountException;
 import com.alanpmullane.atm.model.Account;
 import com.alanpmullane.atm.model.Balance;
+import com.alanpmullane.atm.validator.AccountValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class AccountService {
 
-	private final String accountOneJsonString = "{ \"accountNumber\": 123456789, \"pin\": 1234, \"amount\": 800, \"overdraft\": 150}"; 
+	private final String accountOneJsonString = "{ \"accountNumber\": 123456789, \"pin\": 1234, \"amount\": 800, \"overdraft\": 200}"; 
 	private final String accountTwoJsonString = "{ \"accountNumber\": 987654321, \"pin\": 4321, \"amount\": 1250, \"overdraft\": 150}"; 
 	
-	private List<Account> accounts = null;
-	
+    private final Map<Long, Account> accounts = new HashMap<>();
+
+    @Autowired
+    private AccountValidator accountValidator;
+    
 	public void initialiseAccounts() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		Account accountOne = mapper.readValue(accountOneJsonString, Account.class);
 		Account accountTwo = mapper.readValue(accountTwoJsonString, Account.class);
-		accounts = new ArrayList<Account>();
-		accounts.add(accountOne);
-		accounts.add(accountTwo);
+		accounts.put(accountOne.getAccountNumber(), accountOne);
+		accounts.put(accountTwo.getAccountNumber(), accountTwo);
 	}
 	
-	public Balance checkBalance(Long accountNumber, Integer pin) {
+	public Balance checkBalance(Long accountNumber, Integer pin) throws Exception {
 		Balance balance = new Balance();
 		
+		// TODO: query JPA repository for accounts instead of account map
 		Account account = getAccount(accountNumber);
+		
+		accountValidator.validate(account, pin);
 		
 		balance.setAccountNumber(accountNumber);
 		balance.setAmount(account.getAmount());
@@ -37,11 +45,13 @@ public class AccountService {
 		return balance;
 	}
 	
-	private Account getAccount(Long accountNumber) {
-		Account account = accounts.stream()
-			.filter(a -> a.getAccountNumber().longValue() == accountNumber.longValue())
-			.findFirst()
-			.get();
-		return account;
+	public Account getAccount(Long accountNumber) throws InvalidAccountException {
+		// TODO: query JPA repository for accounts instead of account map
+		return accounts.get(accountNumber);
+	}
+	
+	public void updateAccount(Long accountNumber, Integer amount) {
+		// TODO: query JPA repository for accounts instead of account map
+		accounts.get(accountNumber).setAmount(amount);
 	}
 }
